@@ -1,0 +1,9 @@
+owner,/viewEscrows
+owner,/generateKeys
+owner,/kyb
+owner,/addUser
+owner,/removeUser
+owner,/generateKeys
+owner,/changeRoles
+manager,/createPaymentsLinks
+manager,/viewPaymentsLinks
