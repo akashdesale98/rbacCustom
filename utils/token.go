@@ -53,6 +53,7 @@ func VerifyToken(r *http.Request) (*jwt.Token, error) {
 		return []byte(ACCESS_SECRET), nil
 	})
 	if err != nil {
+		fmt.Println("token err", err)
 		return nil, err
 	}
 	return token, nil
@@ -89,23 +90,23 @@ func ExtractTokenMetadata(r *http.Request) (string, bool, error) {
 		}
 		group, ok := claims["group"].(string)
 		if !ok {
-			fmt.Println("1")
+			fmt.Println("2")
 			return "", false, errors.New("group type cast")
 		}
 		exp, ok := claims["exp"].(string)
 		if !ok {
-			fmt.Println("1")
+			fmt.Println("3")
 			return "", false, errors.New("exp type cast")
 		}
 
 		i, err := strconv.ParseInt(exp, 10, 64)
 		if err != nil {
-			fmt.Println("1")
+			fmt.Println("4")
 			return "", false, errors.New("error converting timestamp")
 		}
 		tm := time.Unix(i, 0)
 		if tm.Before(time.Now()) {
-			fmt.Println("1")
+			fmt.Println("5")
 			return "", false, errors.New("token is expired")
 		}
 

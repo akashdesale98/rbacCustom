@@ -138,6 +138,7 @@ func CheckRole(role, path string) bool {
 	if ok {
 		x = stringInSlice(path, strings.Split(val, ","))
 	}
+	fmt.Println("xvalue", x)
 	if x {
 		return x
 	}

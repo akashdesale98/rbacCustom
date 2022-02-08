@@ -66,6 +66,22 @@ func CheckUser(user_id string) int {
 	return n
 }
 
+func CheckCoStaff(member models.Members) bool {
+	// var n
+	n := models.User{}
+	query := `SELECT * FROM members where username = ` + `'` + member.Username + `'`
+	err := db.Get(&n, query)
+	if err != nil {
+		a := fmt.Sprintf("Scan() err = %v; want nil", err)
+		fmt.Println("a::", a)
+		return false
+	}
+	if n.Privilage == "owner" {
+		return false
+	}
+	return true
+}
+
 func InsertUser(mem *models.Members) (int, error) {
 	res, err := db.Exec(`
 	INSERT INTO members(username, name, password,privilage) VALUES ($1, $2, $3,$4) RETURNING *;`,
@@ -83,7 +99,7 @@ func InsertUser(mem *models.Members) (int, error) {
 }
 
 func DeleteUser(userid string) (int, error) {
-	res, err := db.Exec(`DELETE * FROM members where username='$1';`, userid)
+	res, err := db.Exec(`DELETE * FROM members where username = $1;`, userid)
 	if err != nil {
 		log.Println("error saving member: ", err)
 		return 0, err
@@ -97,7 +113,7 @@ func DeleteUser(userid string) (int, error) {
 }
 
 func ChangeRole(mem *models.Members) (int, error) {
-	res, err := db.Exec(`UPDATE members SET privilage = '$1' WHERE username = '$2';`, mem.Privilage, mem.Username)
+	res, err := db.Exec(`UPDATE members SET privilage = $1 WHERE username = $2;`, mem.Privilage, mem.Username)
 	if err != nil {
 		log.Println("error saving member: ", err)
 		return 0, err
